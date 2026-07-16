@@ -88,3 +88,22 @@ class HealthCheckTests(SimpleTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"status": "ok"})
+
+
+class HostingTests(SimpleTestCase):
+    def test_extend_allowed_hosts_adds_render_hostname_once(self):
+        from common.hosting import extend_allowed_hosts
+
+        self.assertEqual(
+            extend_allowed_hosts(["localhost"], "northstar-booking-kit-v1-0-0.onrender.com"),
+            ["localhost", "northstar-booking-kit-v1-0-0.onrender.com"],
+        )
+
+    def test_extend_allowed_hosts_ignores_blank_or_duplicate_values(self):
+        from common.hosting import extend_allowed_hosts
+
+        self.assertEqual(
+            extend_allowed_hosts(["localhost", "northstar-booking-kit-v1-0-0.onrender.com"], "northstar-booking-kit-v1-0-0.onrender.com"),
+            ["localhost", "northstar-booking-kit-v1-0-0.onrender.com"],
+        )
+        self.assertEqual(extend_allowed_hosts(["localhost"], ""), ["localhost"])

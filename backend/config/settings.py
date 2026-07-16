@@ -8,6 +8,7 @@ from pathlib import Path
 import dj_database_url
 from django.core.exceptions import ImproperlyConfigured
 from common.env import load_dotenv_file
+from common.hosting import extend_allowed_hosts
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 for dotenv_path in (BASE_DIR.parent / ".env", BASE_DIR / ".env"):
@@ -47,6 +48,7 @@ SECRET_KEY = get_env(
 )
 DEBUG = get_bool("DJANGO_DEBUG", False)
 ALLOWED_HOSTS = get_list("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1")
+ALLOWED_HOSTS = extend_allowed_hosts(ALLOWED_HOSTS, get_env("RENDER_EXTERNAL_HOSTNAME", default=""))
 
 if os.getenv("DATABASE_URL"):
     DATABASES = {
