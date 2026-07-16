@@ -92,6 +92,28 @@ class BookingApiTests(APITestCase):
         booking.refresh_from_db()
         self.assertEqual(booking.status, BookingStatus.CANCELLED)
 
+    def test_customer_can_cancel_booking_without_primary_staff_assignment(self):
+        self.resource.primary_staff = None
+        self.resource.save(update_fields=["primary_staff", "updated_at"])
+        booking = Booking.objects.create(
+            user=self.customer,
+            resource=self.resource,
+            start_datetime=self.start,
+            end_datetime=self.end,
+            number_of_guests=1,
+            status=BookingStatus.PENDING,
+            unit_price=50,
+            total_price=100,
+            blocks_availability=False,
+        )
+        self.client.force_authenticate(self.customer)
+
+        response = self.client.post(reverse("booking-cancel", args=[booking.id]), {"reason": "Need to reschedule"}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        booking.refresh_from_db()
+        self.assertEqual(booking.status, BookingStatus.CANCELLED)
+
     def test_invalid_state_transition_is_rejected(self):
         booking = Booking.objects.create(
             user=self.customer,

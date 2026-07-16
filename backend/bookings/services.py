@@ -110,7 +110,9 @@ def create_booking(*, user, resource: Resource, start_datetime, end_datetime, nu
 
 @transaction.atomic
 def transition_booking(*, booking: Booking, actor, target_status: str, reason: str = "") -> Booking:
-    booking = Booking.objects.select_for_update().select_related("resource", "user", "resource__primary_staff").get(pk=booking.pk)
+    # Avoid locking through the nullable primary_staff relation because PostgreSQL
+    # rejects FOR UPDATE on the nullable side of an outer join.
+    booking = Booking.objects.select_for_update().select_related("resource", "user").get(pk=booking.pk)
     if BookingTransition(booking.status, target_status) not in ALLOWED_TRANSITIONS:
         raise serializers.ValidationError({"status": ["This booking status transition is not allowed."]}, code="invalid_transition")
 
