@@ -28,7 +28,7 @@ Import the repository with the root `render.yaml` blueprint. The blueprint is co
 - `rootDir: backend`
 - Docker runtime
 - `Dockerfile` resolved from `backend/Dockerfile`
-- health check path `/api/schema/`
+- health check path `/api/health/`
 
 ### Manual path
 
@@ -37,7 +37,7 @@ If you configure the service manually in the Render dashboard:
 - Root Directory: `backend`
 - Dockerfile Path: `Dockerfile`
 - Docker Build Context Directory: `.`
-- Health Check Path: `/api/schema/`
+- Health Check Path: `/api/health/`
 
 The backend container now runs migrations on startup and binds Gunicorn to Render's runtime `PORT`, so you do not need a paid pre-deploy command.
 
@@ -66,10 +66,10 @@ JWT_REFRESH_TOKEN_DAYS=7
 After the service finishes deploying, open:
 
 ```text
-https://<your-render-service>.onrender.com/api/schema/
+https://<your-render-service>.onrender.com/api/health/
 ```
 
-If that endpoint responds, the backend health check path is working.
+If that endpoint responds with `{"status":"ok"}`, the backend health check path is working.
 
 ## 3. Deploy the frontend on Vercel
 

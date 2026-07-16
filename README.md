@@ -130,7 +130,7 @@ See `docs/deployment.md`.
 Recommended hosted demo path:
 1. Create a Neon database and copy its connection string into `DATABASE_URL`.
 2. Deploy the backend to Render from `backend/` or the included `render.yaml`.
-3. Verify the backend health endpoint at `https://<render-domain>/api/schema/`.
+3. Verify the backend health endpoint at `https://<render-domain>/api/health/`.
 4. Deploy the frontend to Vercel with `frontend/` as the root directory.
 5. Set `NEXT_PUBLIC_API_URL=https://<render-domain>` in Vercel and redeploy.
 

@@ -2,6 +2,7 @@
 from pathlib import Path
 from unittest.mock import patch
 
+from django.test import Client
 from django.test import SimpleTestCase
 
 
@@ -79,3 +80,11 @@ class RuntimeStartupTests(SimpleTestCase):
             main()
 
         mock_run_startup.assert_called_once_with(port="10000", workers=3, run_migrate=True)
+
+
+class HealthCheckTests(SimpleTestCase):
+    def test_health_check_returns_ok_payload(self):
+        response = Client().get("/api/health/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"status": "ok"})
