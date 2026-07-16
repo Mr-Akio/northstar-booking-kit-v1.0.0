@@ -68,6 +68,12 @@ Open `http://localhost:3000`.
 ## 8. Environment variables
 Use `.env.example` as the source of truth. Required runtime values include `DJANGO_SECRET_KEY`, `DATABASE_URL`, `DJANGO_ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS`, `CSRF_TRUSTED_ORIGINS`, and `NEXT_PUBLIC_API_URL`.
 
+Hosted demo defaults:
+- Vercel deploys `frontend/` only.
+- Render deploys `backend/` only.
+- `NEXT_PUBLIC_API_URL` must point to the Render backend base URL.
+- Neon provides the `DATABASE_URL`.
+
 ## 9. Docker setup
 Development:
 ```bash
@@ -121,6 +127,13 @@ cd frontend && npm run lint && npm run typecheck
 ## 17. Deployment guide
 See `docs/deployment.md`.
 
+Recommended hosted demo path:
+1. Create a Neon database and copy its connection string into `DATABASE_URL`.
+2. Deploy the backend to Render from `backend/` or the included `render.yaml`.
+3. Verify the backend health endpoint at `https://<render-domain>/api/schema/`.
+4. Deploy the frontend to Vercel with `frontend/` as the root directory.
+5. Set `NEXT_PUBLIC_API_URL=https://<render-domain>` in Vercel and redeploy.
+
 ## 18. Security notes
 - Do not commit real secrets.
 - Use HTTPS, secure cookies, and production `ALLOWED_HOSTS`/CORS/CSRF settings.
@@ -152,6 +165,7 @@ See `LICENSE.md`. Review third-party licenses before commercial sale.
 - Staff-to-resource mapping is single-owner in v1.
 - The frontend currently treats availability inputs as UTC wall-clock values; projects that need per-location timezones should extend the theme/config layer.
 - Docker flows were scaffolded but not executed locally because Docker is not installed in this environment.
+- Hosted demo deployment still requires you to enter platform secrets in Vercel, Render, and Neon manually.
 
 ## 22. Roadmap
 - Many-to-many staff assignment
