@@ -30,7 +30,15 @@ if (Test-Path $checksumPath) {
   Remove-Item -LiteralPath $checksumPath -Force
 }
 
+git rev-parse --verify $Version | Out-Null
+if ($LASTEXITCODE -ne 0) {
+  throw "Git reference '$Version' was not found."
+}
+
 git archive --format=zip "--prefix=$baseName/" --output="$archivePath" $Version
+if ($LASTEXITCODE -ne 0) {
+  throw "git archive failed for reference '$Version'."
+}
 
 $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $archivePath).Hash.ToLowerInvariant()
 Set-Content -LiteralPath $checksumPath -Value "$hash *$($baseName).zip"
