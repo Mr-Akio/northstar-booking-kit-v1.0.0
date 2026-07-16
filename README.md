@@ -1,5 +1,7 @@
 # Northstar Booking Kit
 
+# northstar-booking-kit-v1.0.0
+
 ## 1. Project overview
 A reusable full-stack booking starter kit for rooms, appointments, rentals, meeting spaces, and other time-based resources.
 
