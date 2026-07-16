@@ -1,7 +1,9 @@
 
 from pathlib import Path
+from unittest.mock import call
 from unittest.mock import patch
 
+from django.conf import settings
 from django.test import Client
 from django.test import SimpleTestCase
 
@@ -57,7 +59,7 @@ class RuntimeStartupTests(SimpleTestCase):
             ],
         )
 
-    def test_run_startup_runs_migrate_before_gunicorn(self):
+    def test_run_startup_runs_static_setup_before_gunicorn(self):
         from common.runtime import build_gunicorn_command, run_startup
 
         with (
@@ -68,7 +70,13 @@ class RuntimeStartupTests(SimpleTestCase):
             mock_popen.return_value.wait.return_value = 0
             run_startup("10000")
 
-        mock_run.assert_called_once_with(["python", "manage.py", "migrate"], check=True)
+        self.assertEqual(
+            mock_run.call_args_list,
+            [
+                call(["python", "manage.py", "collectstatic", "--noinput"], check=True),
+                call(["python", "manage.py", "migrate"], check=True),
+            ],
+        )
         mock_popen.assert_called_once_with(build_gunicorn_command("10000"))
         mock_popen.return_value.wait.assert_called_once_with()
         self.assertEqual(raised.exception.code, 0)
@@ -107,3 +115,14 @@ class HostingTests(SimpleTestCase):
             ["localhost", "northstar-booking-kit-v1-0-0.onrender.com"],
         )
         self.assertEqual(extend_allowed_hosts(["localhost"], ""), ["localhost"])
+
+
+class StaticFilesTests(SimpleTestCase):
+    def test_whitenoise_is_enabled_for_static_assets(self):
+        self.assertIn("whitenoise.middleware.WhiteNoiseMiddleware", settings.MIDDLEWARE)
+
+    def test_staticfiles_storage_uses_hashed_assets(self):
+        self.assertEqual(
+            settings.STORAGES["staticfiles"]["BACKEND"],
+            "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        )

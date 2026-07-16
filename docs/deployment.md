@@ -39,7 +39,7 @@ If you configure the service manually in the Render dashboard:
 - Docker Build Context Directory: `.`
 - Health Check Path: `/api/health/`
 
-The backend container now runs migrations on startup and binds Gunicorn to Render's runtime `PORT`, so you do not need a paid pre-deploy command.
+The backend container now runs `collectstatic` and migrations on startup, then binds Gunicorn to Render's runtime `PORT`, so you do not need a paid pre-deploy command.
 
 ### Required backend env vars
 
@@ -70,6 +70,14 @@ https://<your-render-service>.onrender.com/api/health/
 ```
 
 If that endpoint responds with `{"status":"ok"}`, the backend health check path is working.
+
+Also verify that Django Admin styles load correctly:
+
+```text
+https://<your-render-service>.onrender.com/admin/
+```
+
+The admin UI should render with normal Django styling. If it looks unstyled, the backend did not finish `collectstatic` or the new image has not finished deploying yet.
 
 ## 3. Deploy the frontend on Vercel
 

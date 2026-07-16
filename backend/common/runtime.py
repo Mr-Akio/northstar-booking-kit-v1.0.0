@@ -15,6 +15,8 @@ def build_gunicorn_command(port: str, workers: int = 3) -> list[str]:
 
 
 def run_startup(port: str, workers: int = 3, run_migrate: bool = True) -> None:
+    subprocess.run(["python", "manage.py", "collectstatic", "--noinput"], check=True)
+
     if run_migrate:
         subprocess.run(["python", "manage.py", "migrate"], check=True)
 

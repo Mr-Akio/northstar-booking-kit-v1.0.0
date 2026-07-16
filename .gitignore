@@ -13,7 +13,8 @@ backend/.pytest_cache/
 backend/dev.sqlite3
 backend/test.sqlite3
 backend/media/
-backend/staticfiles/
+backend/staticfiles/*
+!backend/staticfiles/.gitkeep
 .DS_Store
 .vscode/
 dist/

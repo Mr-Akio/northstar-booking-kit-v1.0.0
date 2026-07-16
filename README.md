@@ -12,11 +12,12 @@ A reusable full-stack booking starter kit for rooms, appointments, rentals, meet
 - Customer, staff, and admin-facing Next.js App Router frontend with a commercial-style reference UI
 - UTC-first booking timestamps with frontend-side normalization from `datetime-local` inputs
 - PostgreSQL-focused conflict protection with transactional booking service and PostgreSQL exclusion migration
+- Production static asset pipeline for Django Admin via WhiteNoise and startup `collectstatic`
 - OpenAPI schema, Docker scaffolding, CI workflow, demo seed command, backend/frontend tests, Playwright happy path, and preset-ready branding
 
 ## 3. Technology stack
 - Frontend: Next.js, TypeScript, Tailwind CSS, React Hook Form, Zod, TanStack Query, Lucide, Framer Motion
-- Backend: Django, DRF, PostgreSQL, Simple JWT, django-filter, drf-spectacular, Gunicorn
+- Backend: Django, DRF, PostgreSQL, Simple JWT, django-filter, drf-spectacular, Gunicorn, WhiteNoise
 - Infra: Docker, Docker Compose, Nginx, GitHub Actions
 
 ## 4. Architecture overview
@@ -130,7 +131,7 @@ See `docs/deployment.md`.
 Recommended hosted demo path:
 1. Create a Neon database and copy its connection string into `DATABASE_URL`.
 2. Deploy the backend to Render from `backend/` or the included `render.yaml`.
-3. Verify the backend health endpoint at `https://<render-domain>/api/health/`.
+3. Verify the backend health endpoint at `https://<render-domain>/api/health/` and confirm Django Admin styles load from `/static/admin/`.
 4. Deploy the frontend to Vercel with `frontend/` as the root directory.
 5. Set `NEXT_PUBLIC_API_URL=https://<render-domain>` in Vercel and redeploy.
 
