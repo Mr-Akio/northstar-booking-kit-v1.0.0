@@ -152,6 +152,11 @@ Preset configuration:
 
 Commercial launch notes:
 - `docs/commercial-package.md`
+- `docs/sales-listing-copy.md`
+- `docs/live-demo-script.md`
+- `docs/final-commercial-audit-v1.0.1.md`
+- `docs/release-manifest-v1.0.1.md`
+- `RELEASE_NOTES.md`
 - `docs/demo-presets.md`
 - `docs/third-party-notices.md`
 - `docs/release-checklist.md`

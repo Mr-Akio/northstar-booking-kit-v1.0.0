@@ -2,6 +2,16 @@
 
 Use this checklist before listing Northstar Booking Kit for sale.
 
+## Current commercial release
+
+- Recommended buyer tag: `v1.0.1`
+- Release manifest: `docs/release-manifest-v1.0.1.md`
+- Final audit: `docs/final-commercial-audit-v1.0.1.md`
+- Sales listing starter copy: `docs/sales-listing-copy.md`
+- Demo walkthrough: `docs/live-demo-script.md`
+
+The original `v1.0.0` tag points to an older commit. Use `v1.0.1` for the buyer package.
+
 ## Product quality
 
 - [ ] Backend migrations apply from a clean database.
